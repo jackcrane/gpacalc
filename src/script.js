@@ -138,6 +138,19 @@ function averageIze() {
 }
 
 function appendGrades(gradesMaster) {
+	// LEGACY
+	// 	var parent = document.getElementById("courses").getElementsByClassName("col-md-12")[0]
+	// 	var parentE = document.createElement("div")
+	// 	var e = document.createElement("strong")
+	// 	parentE.className = "pull-left bold h3-line-height"
+	// 	parentE.style.marginTop = "4px"
+	// 	parentE.style.marginLeft = "8px"
+	// 	e.innerHTML = "GPA: "
+	// 	e.innerHTML = e.innerHTML + gradesMaster
+	// 	parentE.appendChild(e)
+	// 	parent.appendChild(parentE)
+	// / Legacy /
+
 	document.getElementById("performanceCollapse").getElementsByTagName("div")[0].id = "gpaParent"
 
 	var z = document.createElement('a');
@@ -153,4 +166,6 @@ function appendGrades(gradesMaster) {
 	y.appendChild(z);
 	y.appendChild(br);
 	y.appendChild(hr);
+
+	
 }
