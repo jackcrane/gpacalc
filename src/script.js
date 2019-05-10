@@ -14,6 +14,10 @@ if(boolLoc == true) {
 
 }
 
+window.onhashchange = function() { 
+     setTimeout(function(){ grade(); }, 5500);
+}
+
 
 function grade() {
 	var rows = getElements()
