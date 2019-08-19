@@ -157,19 +157,22 @@ function appendGrades(gradesMaster) {
 
 	document.getElementById("performanceCollapse").getElementsByTagName("div")[0].id = "gpaParent"
 
-	var z = document.createElement('a');
-	z.innerHTML = ' GPA';
-	z.className = 'accordion-toggle';
-	var x = document.createElement("span")
-	x.className = 'label label-success'
-	x.innerHTML = gradesMaster
-	var br = document.createElement("br")
-	var hr = document.createElement("hr")
-	var y = document.getElementById("gpaParent")
-	y.appendChild(x);
-	y.appendChild(z);
-	y.appendChild(br);
-	y.appendChild(hr);
+	if(document.getElementById("gpaDisplay")==null) {
 
+		var z = document.createElement('a');
+		z.innerHTML = ' GPA';
+		z.id = "gpaDisplay"
+		z.className = 'accordion-toggle';
+		var x = document.createElement("span")
+		x.className = 'label label-success'
+		x.innerHTML = gradesMaster
+		var br = document.createElement("br")
+		var hr = document.createElement("hr")
+		var y = document.getElementById("gpaParent")
+		y.appendChild(x);
+		y.appendChild(z);
+		y.appendChild(br);
+		y.appendChild(hr);
+	}
 	
 }
