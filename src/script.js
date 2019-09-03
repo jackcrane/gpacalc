@@ -142,6 +142,24 @@ function getClassName(elem) {
 	}
 }
 
+function getClassWeight(elem) {
+	var course = elem.getElementsByClassName("col-md-3")[0].getElementsByTagName("h3")[0].innerHTML.toString()
+		if(course.toLowerCase().includes("ap") == true) {
+			var modifier = 1.33
+			return 1.33
+		} else {
+			if(course.toLowerCase().includes("hon") == true) {
+				var modifier = 0.666
+				return 0.66
+			} else if(course.toLowerCase().includes("study hall") == true) {
+				elem.style.display = 'none'
+			} else {
+				var modifier = 0
+				return 0.0
+			}
+		}
+}
+
 function getClassGrade(elem) {
 	if(elem != null) {
 		var currentGrade = elem.getElementsByClassName("showGrade")[0].innerHTML.toString()
@@ -161,6 +179,7 @@ function populateModalTable(elem) {
 	var modalClassName = getClassName(elem)
 	var modalClassGrade = getClassGrade(elem)
 	var modalClassGpa = gradeToGpa(modalClassGrade.replace('%','').toString())
+	var modalClassWeight = getClassWeight(elem)
 	console.log(modalClassGrade.replace('%','').toString())
 
 	var parent = document.getElementById('gpaOutTable')
@@ -175,6 +194,7 @@ function populateModalTable(elem) {
 	row.appendChild(thClass)
 	row.appendChild(thGrade)
 	row.appendChild(thGpa)
+
 
 	parent.appendChild(row)
 
@@ -267,8 +287,10 @@ function createModalV2() {
 	headerTr.appendChild(th)
 
 	th = document.createElement('th')
-	th.innerHTML = "GPA Score"
+	th.innerHTML = "GPA Score (unweighted)"
 	headerTr.appendChild(th)
+
+	// CONTINUE HERE: GRADE WEIGHT
 
 	table.setAttribute('class','table table-striped table-condensed table-mobile-stacked')
 
