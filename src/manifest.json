@@ -10,5 +10,8 @@
 		],
 		"js":["script.js"]
 	}],
-	"permissions": ["activeTab"]
+	"permissions": ["activeTab"],
+	"externally_connectable": {
+  		"matches": ["https://*.myschoolapp.com/*"]
+	}
 }
