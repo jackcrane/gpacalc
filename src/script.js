@@ -1,6 +1,7 @@
 var loc = window.location.href
 var boolLoc = loc.includes(".myschoolapp.com")
 
+console.log("Myschoolapp GPA Calculator has been successfully injected")
 
 const GPA_MAP = {100:4.3,99:4.3,98:4.3,97:4.3,96:4.0,95:4.0,94:4.0,93:3.7,92:3.7,91:3.7,90:3.7,89:3.3,88:3.3,87:3.3,86:3.0,85:3.0,84:3.0,83:2.7,82:2.7,81:2.7,80:2.7,79:2.3,78:2.3,77:2.3,76:2.0,75:2.0,74:2.0,73:1.7,72:1.7,71:1.7,70:1.7,69:1.3,68:1.3,67:1.3,66:1.0,65:1.0,64:1.0,63:0.7,62:0.7,61:0.7,60:0.7,59:0,58:0,57:0,56:0,55:0,54:0,53:0,52:0,51:0,50:0,49:0,48:0,47:0,46:0,45:0,44:0,43:0,42:0,41:0,40:0,39:0,38:0,37:0,36:0,35:0,34:0,33:0,32:0,31:0,30:0,29:0,28:0,27:0,26:0,25:0,24:0,23:0,22:0,21:0,20:0,19:0,18:0,17:0,16:0,15:0,14:0,13:0,12:0,11:0,10:0,9:0,8:0,7:0,6:0,5:0,4:0,3:0,2:0,1:0,0:0}
 
@@ -106,13 +107,13 @@ function checkForInsights(elem) {
 }
 
 function writeInsights() {
-	console.log('function run')
-	for(var i = 0; i<insightsArrayLength; i++) {
-		var className = insightsArray[i]
-		var classGrade = insightsArray[i+1]
-		console.log(className)
-		console.log(classGrade)
-	}
+	// console.log('function run')
+	// for(var i = 0; i<insightsArrayLength; i++) {
+	// 	var className = insightsArray[i]
+	// 	var classGrade = insightsArray[i+1]
+	// 	console.log(className)
+	// 	console.log(classGrade)
+	// }
 }
 
 function getElements() {
@@ -141,12 +142,15 @@ function calcGrade(elem) {
 			}
 		}
 		var currentGrade = elem.getElementsByClassName("showGrade")[0].innerHTML.toString()
+		currentGrade = currentGrade.replace(/^\s+|\s+$/gm,'').replace(/%/g,'')
 
 		if(currentGrade.toString().includes("&nbsp;") == false) {
 
 			var finalGrade = currentGrade.toString().replace(/\s/g, '');
 			finalGrade = finalGrade.substring(0, finalGrade.length - 1);
+			// console.log(finalGrade)
 			var gpa = gradeToGpa(finalGrade)
+			// console.log(gpa)
 			gpa = +gpa.toString() + +modifier.toString()
 			return gpa
 		} else {
@@ -205,7 +209,7 @@ function populateModalTable(elem) {
 	var modalClassGrade = getClassGrade(elem)
 	var modalClassGpa = gradeToGpa(modalClassGrade.replace('%','').toString())
 	var modalClassWeight = getClassWeight(elem)
-	console.log(modalClassGrade.replace('%','').toString())
+	// console.log(modalClassGrade.replace('%','').toString())
 
 	var parent = document.getElementById('gpaOutTable')
 	var row = document.createElement('tr')
@@ -231,6 +235,7 @@ function populateModalTable(elem) {
 }
 
 function gradeToGpa(pct){
+	pct = Math.round(pct)
 	return GPA_MAP[pct]
 }
 
@@ -337,7 +342,7 @@ function createModalV2() {
 	bbModal.appendChild(close)
 	modalParent.appendChild(bbModal)
 	document.body.appendChild(modalParent)
-	console.log(modalParent)
+	// console.log(modalParent)
 }
                     //total Class 1 name,class1average,class1grade
 function populateModal(gpa,c1n,c1a,c1g,c2n,c2a,c2g,c3n,c3a,c3g,c4n,c4a,c4g,c5n,c5a,c5g,c6n,c6a,c6g,c7n,c7a,c7g,c8n,c8a,c8g,c9n,c9a,c9g,c10n,c10a,c10g,c11n,c11a,c11g,c12n,c12a,c12g,c13n,c13a,c13g,c14n,c14a,c14g,c15n,c15a,c15g) {
