@@ -13,41 +13,41 @@
 // *                                                                                                        *
 // *     ______________________________________________________________________________________________     *
 // *    |                                    Notes to readers / editors                                |    *
-// *    | [-] Comments are BEFORE the code block they are describing. Assume that the comment describes|
-// *    |     code all the way down to the next comment. If it does not, there should be another       |
-// *    |     closing it out.                                                                          |
-// *    | [-] Be sure to record what you did in the changelog - Include the date, your name, the new   |
-// *    |     version number, as well as a description of what was changed and where.                  |
-// *    |______________________________________________________________________________________________|
+// *    | [-] Comments are BEFORE the code block they are describing. Assume that the comment describes|    *
+// *    |     code all the way down to the next comment. If it does not, there should be another       |    *
+// *    |     closing it out.                                                                          |    *
+// *    | [-] Be sure to record what you did in the changelog - Include the date, your name, the new   |    *
+// *    |     version number, as well as a description of what was changed and where.                  |    *
+// *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *   This extension is open source. Visit or fork github.com/jackcrane/gpacalc/ to view the source code   *
 // *                                                                                                        *
 // **********************************************************************************************************
 
+// Variable Instantiation
+const GPA_MAP = {100:4.3,99:4.3,98:4.3,97:4.3,96:4.0,95:4.0,94:4.0,93:3.7,92:3.7,91:3.7,90:3.7,89:3.3,88:3.3,87:3.3,86:3.0,85:3.0,84:3.0,83:2.7,82:2.7,81:2.7,80:2.7,79:2.3,78:2.3,77:2.3,76:2.0,75:2.0,74:2.0,73:1.7,72:1.7,71:1.7,70:1.7,69:1.3,68:1.3,67:1.3,66:1.0,65:1.0,64:1.0,63:0.7,62:0.7,61:0.7,60:0.7,59:0,58:0,57:0,56:0,55:0,54:0,53:0,52:0,51:0,50:0,49:0,48:0,47:0,46:0,45:0,44:0,43:0,42:0,41:0,40:0,39:0,38:0,37:0,36:0,35:0,34:0,33:0,32:0,31:0,30:0,29:0,28:0,27:0,26:0,25:0,24:0,23:0,22:0,21:0,20:0,19:0,18:0,17:0,16:0,15:0,14:0,13:0,12:0,11:0,10:0,9:0,8:0,7:0,6:0,5:0,4:0,3:0,2:0,1:0,0:0}
+const gpa_avg = []
+var insightsArray = new Array()
+var insightsArrayLength = 0
 
-
+// Verify if the page is actually on myschoolapp. Chrome SHOULD do this, but this is a failsafe so we dont clog our debugging notifications with irrelevant junk
 var loc = window.location.href
 var boolLoc = loc.includes(".myschoolapp.com")
 
-console.log("Myschoolapp GPA Calculator has been successfully injected")
-
-const GPA_MAP = {100:4.3,99:4.3,98:4.3,97:4.3,96:4.0,95:4.0,94:4.0,93:3.7,92:3.7,91:3.7,90:3.7,89:3.3,88:3.3,87:3.3,86:3.0,85:3.0,84:3.0,83:2.7,82:2.7,81:2.7,80:2.7,79:2.3,78:2.3,77:2.3,76:2.0,75:2.0,74:2.0,73:1.7,72:1.7,71:1.7,70:1.7,69:1.3,68:1.3,67:1.3,66:1.0,65:1.0,64:1.0,63:0.7,62:0.7,61:0.7,60:0.7,59:0,58:0,57:0,56:0,55:0,54:0,53:0,52:0,51:0,50:0,49:0,48:0,47:0,46:0,45:0,44:0,43:0,42:0,41:0,40:0,39:0,38:0,37:0,36:0,35:0,34:0,33:0,32:0,31:0,30:0,29:0,28:0,27:0,26:0,25:0,24:0,23:0,22:0,21:0,20:0,19:0,18:0,17:0,16:0,15:0,14:0,13:0,12:0,11:0,10:0,9:0,8:0,7:0,6:0,5:0,4:0,3:0,2:0,1:0,0:0}
-
-const gpa_avg = []
-
-if(boolLoc == true) {
+if(boolLoc) {
 	// This is the portal
 	setTimeout(function(){ grade(); }, 5500);
-} else {
-	// this is not the portal, do nothing
-
 }
 
+// Let people know (in the console) that the injection is successful. This in no way says it will work, but the script has run
+console.log("Myschoolapp GPA Calculator has been successfully injected")
+
+// Allow a breif timeout (5 seconds) for the portal to load in - it usually takes a few seconds to build the page, then start the program by calling grade()
 window.onhashchange = function() { 
      setTimeout(function(){ grade(); }, 5500);
 }
 
-
+// Our master function - absolutely horribly written but i dont really want to change it. If anyone wants to they are welcome to put it in a loop
 function grade() {
 	var rows = getElements()
 	var elem1 = rows[0]
@@ -100,48 +100,12 @@ function grade() {
 	
 
 	appendGrades(averageIze())
-	writeInsights()
-	// calcGrade(elem2)
-	// calcGrade(elem3)
-	// calcGrade(elem4)
-	// calcGrade(elem5)
-	// calcGrade(elem6)
-	// calcGrade(elem7)
-	// calcGrade(elem8)
-	// calcGrade(elem9)
-	// calcGrade(elem10)
-	// calcGrade(elem11)
 }
 
+// An adittedly bad name - this function will add the calculated grade to the gpa_avg array to be averaged later on. The last is from a feature that I abandoned - the modal
 function doStuffWith(elem) {
 	gpa_avg.push(calcGrade(elem))
 	populateModalTable(elem)
-	checkForInsights(elem)
-}
-
-var insightsArray = new Array()
-var insightsArrayLength = 0
-
-function checkForInsights(elem) {
-	var insightsClassGrade = getClassGrade(elem).replace('%','').toString()
-	var icg = insightsClassGrade
-	var insightsClassName = getClassName(elem)
-	// BELOW LINE: BE SURE TO REMOVE TRUE BEFORE RELEASE
-	if(true || icg == 96 || icg == 93 || icg == 89 || icg == 86 || icg == 83 || icg == 79 || icg == 76 || icg == 73 || icg == 69 || icg == 66 || icg == 63 || icg <= 59) {
-		insightsArray.push(insightsClassName)
-		insightsArray.push(insightsClassGrade)
-		insightsArrayLength += 1
-	}
-}
-
-function writeInsights() {
-	// console.log('function run')
-	// for(var i = 0; i<insightsArrayLength; i++) {
-	// 	var className = insightsArray[i]
-	// 	var classGrade = insightsArray[i+1]
-	// 	console.log(className)
-	// 	console.log(classGrade)
-	// }
 }
 
 function getElements() {
@@ -154,34 +118,30 @@ function getElements() {
 
 
 
-// ****************************************************************************** //
-
+// And heres where all the magic happens. This element gets the corse name and sees if it includes anything that would indicate a higher level corse and gets the current grade.
 function calcGrade(elem) {
 	
 	if(elem != null) {
-		var course = elem.getElementsByClassName("col-md-3")[0].getElementsByTagName("h3")[0].innerHTML.toString()
-		if(course.toLowerCase().includes("ap") == true) {
-			var modifier = 1.33
-		} else {
-			if(course.toLowerCase().includes("hon") == true) {
-				var modifier = 0.666
-			} else {
-				var modifier = 0
-			}
-		}
+		// Class name:
+		var course = getClassName(elem)
+		// adding the gpa boost if it is high level:
+		var modifier = getClassWeight(elem)
+		// Getting the current grade: ALSO BE AWARE THAT THE REST OF THIS FUNCTION COULD BE REPLACED BY getClassGrade() I JUST HAVENT DONE IT YET
 		var currentGrade = elem.getElementsByClassName("showGrade")[0].innerHTML.toString()
+		// Removing spaces and the "%":
 		currentGrade = currentGrade.replace(/^\s+|\s+$/gm,'').replace(/%/g,'')
-
+		// Make sure the grade is not empty:
 		if(currentGrade.toString().includes("&nbsp;") == false) {
-
+			// Setting the finalgrade to current grade if it is legit - I know I already replaced the spaces but it broke when i removed ".replace(/\s/g, '');"
 			var finalGrade = currentGrade.toString().replace(/\s/g, '');
 			finalGrade = finalGrade.substring(0, finalGrade.length - 1);
-			// console.log(finalGrade)
+			// Finally get the GPA from the grade
 			var gpa = gradeToGpa(finalGrade)
-			// console.log(gpa)
+			// Aand add the modifier... then return it
 			gpa = +gpa.toString() + +modifier.toString()
 			return gpa
 		} else {
+			// Return "nc" if anything goes wrong ("no content")
 			return "nc"
 		}
 	} else {
@@ -189,6 +149,7 @@ function calcGrade(elem) {
 	}
 }
 
+// Get the name of the class within the provided row element
 function getClassName(elem) {
 	
 	if(elem != null) {
@@ -199,6 +160,7 @@ function getClassName(elem) {
 	}
 }
 
+// Determine class weight
 function getClassWeight(elem) {
 	var course = elem.getElementsByClassName("col-md-3")[0].getElementsByTagName("h3")[0].innerHTML.toString()
 		if(course.toLowerCase().includes("ap") == true) {
@@ -208,8 +170,6 @@ function getClassWeight(elem) {
 			if(course.toLowerCase().includes("hon") == true) {
 				var modifier = 0.666
 				return 0.66
-			} else if(course.toLowerCase().includes("study hall") == true) {
-				elem.style.display = 'none'
 			} else {
 				var modifier = 0
 				return 0.0
@@ -217,10 +177,11 @@ function getClassWeight(elem) {
 		}
 }
 
+// Determine the grade the student currently has in the class.
 function getClassGrade(elem) {
 	if(elem != null) {
 		var currentGrade = elem.getElementsByClassName("showGrade")[0].innerHTML.toString()
-
+		currentGrade = currentGrade.replace(/^\s+|\s+$/gm,'').replace(/%/g,'')
 		if(currentGrade.toString().includes("&nbsp;") == false) {
 			var finalGrade = currentGrade.toString().replace(/\s/g, '');
 			return finalGrade
@@ -232,12 +193,12 @@ function getClassGrade(elem) {
 	}
 }
 
+// Makes then fills in the table in the modal
 function populateModalTable(elem) {
 	var modalClassName = getClassName(elem)
 	var modalClassGrade = getClassGrade(elem)
 	var modalClassGpa = gradeToGpa(modalClassGrade.replace('%','').toString())
 	var modalClassWeight = getClassWeight(elem)
-	// console.log(modalClassGrade.replace('%','').toString())
 
 	var parent = document.getElementById('gpaOutTable')
 	var row = document.createElement('tr')
@@ -259,14 +220,17 @@ function populateModalTable(elem) {
 
 	// CONTINUE FROM HERE
 
+	// There is sooooooo much more that can be done in here...
 
 }
 
+// Turns a grade from a percentage to a gpa
 function gradeToGpa(pct){
 	pct = Math.round(pct)
 	return GPA_MAP[pct]
 }
 
+// Averages the array that is the gpas
 function averageIze() {
 	var total = 0
 	for(var i = 0; i < gpa_avg.length; i++) {
@@ -276,19 +240,8 @@ function averageIze() {
 	return finalAverage.toFixed(3)
 }
 
+// Creates and fills in the display element that shows the GPA. 
 function appendGrades(gradesMaster) {
-	// LEGACY
-	// 	var parent = document.getElementById("courses").getElementsByClassName("col-md-12")[0]
-	// 	var parentE = document.createElement("div")
-	// 	var e = document.createElement("strong")
-	// 	parentE.className = "pull-left bold h3-line-height"
-	// 	parentE.style.marginTop = "4px"
-	// 	parentE.style.marginLeft = "8px"
-	// 	e.innerHTML = "GPA: "
-	// 	e.innerHTML = e.innerHTML + gradesMaster
-	// 	parentE.appendChild(e)
-	// 	parent.appendChild(parentE)
-	// / Legacy /
 
 	document.getElementById("performanceCollapse").getElementsByTagName("div")[0].id = "gpaParent"
 
@@ -313,6 +266,7 @@ function appendGrades(gradesMaster) {
 	
 }
 
+// Creates the modal that will ultimately show the table from populateModalTable()
 function createModalV2() {
 	var modalParent = document.createElement('div')
 	modalParent.setAttribute('style','position:fixed;width:100%;height:100%;z-index:9999;background-color:rgba(0,0,0,0.4);top:0;')
@@ -372,157 +326,15 @@ function createModalV2() {
 	document.body.appendChild(modalParent)
 	// console.log(modalParent)
 }
-                    //total Class 1 name,class1average,class1grade
-function populateModal(gpa,c1n,c1a,c1g,c2n,c2a,c2g,c3n,c3a,c3g,c4n,c4a,c4g,c5n,c5a,c5g,c6n,c6a,c6g,c7n,c7a,c7g,c8n,c8a,c8g,c9n,c9a,c9g,c10n,c10a,c10g,c11n,c11a,c11g,c12n,c12a,c12g,c13n,c13a,c13g,c14n,c14a,c14g,c15n,c15a,c15g) {
-	document.getElementById('insightGpaOut').innerHTML = gpa
-	var parentTable = document.getElementById('gpaOutTable')
 
-	if(c1n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c1n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c1g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c1a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-
-	if(c2n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c2n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c2g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c2a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-
-	if(c3n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c3n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c3g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c3a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-
-	if(c4n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c4n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c4g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c4a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-
-	if(c5n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c5n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c5g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c5a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-
-	if(c6n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c6n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c6g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c6a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-
-	if(c7n!=null) {
-		var tr = document.createElement('tr')
-
-		var td1 = document.createElement('td')
-		td1.innerHTML = c7n
-		tr.appendChild(td1)
-
-		var td2 = document.createElement('td')
-		td2.innerHTML = c7g
-		tr.appendChild(td2)
-
-		var td3 = document.createElement('td')
-		td3.innerHTML = c7a
-		tr.appendChild(td3)
-
-		parentTable.appendChild(tr)
-	}
-}
-
-function makeRow(className,average,grade) {
-	var tr = document.createElement('tr')
-	var td1 = document.createElement('td').innerHTML = className
-	var td2 = document.createElement('td').innerHTML = grade
-	var td3 = document.createElement('td').innerHTML = average
-	tr.appendChild(td1)
-	tr.appendChild(td2)
-	tr.appendChild(td3)
-	return tr
-}
-
+// Injects the functions for modal controls into the page because im too lazy to figure out how to do it the right way -- kind of a reacuring thing
 function createInsightFucntions() {
 	var script = document.createElement('script')
 	script.innerHTML = "function closeInsights(){document.getElementById('modalParent').style.display = 'none'} function openInsights() {document.getElementById('modalParent').style.display = 'block'}"
 	document.head.appendChild(script)
 }
 
-createInsightFucntions()
-
+// Insight (modal) controls for use by the extension
 function closeInsights() {
 	document.getElementById('modalParent').style.display = 'none'
 }
@@ -531,6 +343,7 @@ function openInsights() {
 	document.getElementById('modalParent').style.display = 'block'
 }
 
+//random functions to call to get the modal working.
+createInsightFucntions()
 createModalV2()
-
 closeInsights()
