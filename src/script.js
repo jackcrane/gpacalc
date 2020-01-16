@@ -8,7 +8,8 @@
 // *    |                                          CHANGELOG                                           |    *
 // *    | Date     | Name | Version Number | Change description                                        |    *
 // *    | 1/16/20  | Jack | 1.4.0 / Fixed the averaging algorithim for the portal's new method of      |    *
-// *    |                           Displaying grades with decimal points. Added "Math.round()" to 252 |    *
+// *    |          |      |       | Displaying grades with decimal points. Added "Math.round()" to 252 |    *
+// *    | 1/16/20  | Jack | 1.4.0 | Removed old, unnecessary functions and commented                   |    *
 // *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *     ______________________________________________________________________________________________     *
@@ -21,6 +22,9 @@
 // *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *   This extension is open source. Visit or fork github.com/jackcrane/gpacalc/ to view the source code   *
+// *                                                                                                        *
+// *   If you made changes, launch 'em and send me an email at 3jbc22@gmail.com so I can add them to the    *
+// *   actual extension as it cannot be shared (unless someone knows how to integrate it with github?)      *
 // *                                                                                                        *
 // **********************************************************************************************************
 
