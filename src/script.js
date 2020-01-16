@@ -1,3 +1,31 @@
+// **********************************************************************************************************
+// *                                                                                                        *
+// *                                         Myschoolapp GPA Calculator                                     *
+// *                                                                                                        *
+// *                                    Written by Jack Crane and CJ Replogle                               *
+// *                    Visit our GitHubs at github.com/jackcrane and github.com/cjreplogle                 *
+// *     ______________________________________________________________________________________________     *
+// *    |                                          CHANGELOG                                           |    *
+// *    | Date     | Name | Version Number | Change description                                        |    *
+// *    | 1/16/20  | Jack | 1.4.0 / Fixed the averaging algorithim for the portal's new method of      |    *
+// *    |                           Displaying grades with decimal points. Added "Math.round()" to 252 |    *
+// *    |______________________________________________________________________________________________|    *
+// *                                                                                                        *
+// *     ______________________________________________________________________________________________     *
+// *    |                                    Notes to readers / editors                                |    *
+// *    | [-] Comments are BEFORE the code block they are describing. Assume that the comment describes|
+// *    |     code all the way down to the next comment. If it does not, there should be another       |
+// *    |     closing it out.                                                                          |
+// *    | [-] Be sure to record what you did in the changelog - Include the date, your name, the new   |
+// *    |     version number, as well as a description of what was changed and where.                  |
+// *    |______________________________________________________________________________________________|
+// *                                                                                                        *
+// *   This extension is open source. Visit or fork github.com/jackcrane/gpacalc/ to view the source code   *
+// *                                                                                                        *
+// **********************************************************************************************************
+
+
+
 var loc = window.location.href
 var boolLoc = loc.includes(".myschoolapp.com")
 
