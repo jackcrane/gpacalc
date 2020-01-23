@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Myschoolapp GPA Calculator: Options</title>
+	<meta name="referrer" content="no-referrer" />
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	<script src="jquery.js"></script>
+	
+	<style>
+		* {
+			font-family:'roboto',sans-serif;
+		}
+		.card {
+			/* Add shadows to create the "card" effect */
+			box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+			transition: 0.3s;
+			width:50%;
+			padding:1% 5%;
+			text-align: left;
+			margin-top:3%;
+		}
+		thin {
+			font-weight: 100;
+		}
+		.padded {
+		    line-height:2;
+		}
+		td {
+			vertical-align: top;
+			padding-bottom:10%;
+		}
+		/* On mouse-over, add a deeper shadow */
+		.card:hover {
+			box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+		}
+
+		/* Add some padding inside the card container */
+		.container {
+			width:100%;
+		}
+		input.label {
+			width:100%;
+			border:none;
+			outline:none;
+		}
+		.label {
+			/*color: #282b31;*/
+		    display: inline;
+		    border-radius: 10rem;
+		    font-weight: 400;
+		    line-height: 2.2;
+		    margin: 0 3px;
+		    padding: .3em .6em .3em .6em;
+		    white-space: nowrap;
+		}
+		.label-green {
+		    background-color: #b7da9b;
+		    color:white;
+		}
+		.label-blue {
+		    background-color: #5FDEE8;
+		    color:white;
+		}
+		.label-purple {
+		    background-color: #B175FF;
+		    color:white;
+		}
+		.label-orange {
+		    background-color: #E8745F;
+		    color:white;
+		}
+		.label-yellow {
+		    background-color: #FFE169;
+		    color:white;
+		}
+
+		.label-green- {
+		    background-color: #39FF14;
+		    color:white;
+		}
+		.label-blue- {
+		    background-color: #554FFF;
+		    color:white;
+		}
+		.label-purple- {
+		    background-color: #E848C1;
+		    color:white;
+		}
+		.label-orange- {
+		    background-color: #FF985C;
+		    color:white;
+		}
+		.label-yellow- {
+		    background-color: #E8CE48;
+		    color:white;
+		}
+		input[type=text], textarea {
+			width:150%;
+		}
+		req::before {
+			color:red;
+			content:'*';
+		}
+		.toastjs-container {
+			position: absolute; /* Fallback */
+			position: fixed;
+			bottom: 30px;
+			left: 30px;
+			width: calc(100% - 60px);
+			max-width: 400px;
+
+			transform: translateX(-150%);
+			transition: transform 1s;
+
+			z-index: 100; /* */
+		}
+
+		.toastjs-container[aria-hidden="false"] {
+			transform: translateX(0%);
+		}
+
+		.toastjs {
+			background: #fefefe;
+			border:5px solid green;
+			padding: 10px 15px 0; /* No bottom padding because the buttons have a margin-bottom */
+			border-left-style: solid;
+			border-left-width: 5px;
+			border-radius: 4px;
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.2);
+		}
+
+		.toastjs.default {
+			border-left-color: #AAAAAA;
+		}
+
+		.toastjs.success {
+			border-left-color: #2ECC40;
+		}
+		.toastjs.warning {
+			border-left-color: #FF851B;
+		}
+		.toastjs.danger {
+			border-left-color: #FF4136;
+		}
+
+
+		.toastjs-btn {
+			background: rgb(240,240,240);
+			padding: 5px 10px;
+			border: 0;
+			border-radius: 4px;
+
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 14px;
+
+			display: inline-block;
+			margin-right: 10px;
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
+
+		.toastjs-btn--custom {
+			background: rgb(50,50,50);
+			color: #fff;
+		}
+
+
+		.toastjs-btn:hover,
+		.toastjs-btn:focus {
+			outline: none;
+			box-shadow: 0 2px 5px 0 rgba(0,0,0,0.2);
+		}
+	</style>
+</head>
+<body>
+	<center>
+		<div class="container">
+			<div class="card"><h1>Myschoolapp GPA Calculator <thin>Options</thin></h1></div>
+			<div class="card">
+				<table>
+					<tr>
+						<td><b class="padded">Display Color Theme:</b></td>
+						<td id="colors">
+							<input type="radio" name="color" value="#b7da9b" checked><span class="label label-green">Green</span></option><br>
+							<input type="radio" name="color" value="#5FDEE8"><span class="label label-blue">Blue</span></option><br>
+							<input type="radio" name="color" value="#B175FF"><span class="label label-purple">Purple</span></option><br>
+							<input type="radio" name="color" value="#E8745F"><span class="label label-orange">Orange</span></option><br>
+							<input type="radio" name="color" value="#FFE169"><span class="label label-yellow">Yellow</span></option><br>
+						</td>
+					</tr>
+					<tr>
+						<td><b class="padded">Modal Color Theme:</b></td>
+						<td id="modalColor">
+							<input type="radio" name="mdcolor" value="#b7da9b" checked><span class="label label-green">Green</span></option><br>
+							<input type="radio" name="mdcolor" value="#5FDEE8"><span class="label label-blue">Blue</span></option><br>
+							<input type="radio" name="mdcolor" value="#B175FF"><span class="label label-purple">Purple</span></option><br>
+							<input type="radio" name="mdcolor" value="#E8745F"><span class="label label-orange">Orange</span></option><br>
+							<input type="radio" name="mdcolor" value="#FFE169"><span class="label label-yellow">Yellow</span></option><br>
+						</td>
+					</tr>
+					<tr>
+						<td><b>Loading wait time: </b><a id="qmark" href="#">?</a><br></td>
+						<td><input type="number" name="waittime" id="waittime" value="5"></td>
+					</tr>
+					<tr>
+						<td><b>GPA Modifiers:</b></td>
+						<td style="padding-bottom:0">
+							<table>
+								<tr><td style="padding-bottom:0"><b>AP Courses: </b></td><td style="padding-bottom:0"><input type="number" id="apmodifier" name="apmodifier" value="1.33"><br></td></tr>
+								<tr><td style="padding-bottom:0"><b>Honors Courses: </b></td><td style="padding-bottom:0"><input type="number" id="honmodifier" name="honmodifier" value=".66"></td></tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<input type="submit" value="Save" id="save" class="label label-green"><br><br>
+				<input type="submit" value="Load Defaults" id="loaddefaults" class="label label-orange">
+			</div>
+			<div class="card">
+				<h2>Contact the developers</h2>
+				<a href="mailto:3jbc22@gmail.com">Email me</a> or <a href="https://github.com/jackcrane/gpacalc/issues">submit an issue on GitHub</a>
+			</div>
+		</div>
+	</center>
+	<script src="options.js"></script>
+</body>
+</html>

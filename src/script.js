@@ -10,6 +10,8 @@
 // *    | 1/16/20  | Jack | 1.4.0 / Fixed the averaging algorithim for the portal's new method of      |    *
 // *    |          |      |       | Displaying grades with decimal points. Added "Math.round()" to 252 |    *
 // *    | 1/16/20  | Jack | 1.4.0 | Removed old, unnecessary functions and commented                   |    *
+// *    | 1/21/20  | Jack | 1.5.0 | Integrated a settings page to allow user to change color theme and |    *
+// *    |          |      |       | AP and honors modifiers, as well as the page calc timeout.         |    *
 // *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *     ______________________________________________________________________________________________     *
@@ -34,13 +36,48 @@ const gpa_avg = []
 var insightsArray = new Array()
 var insightsArrayLength = 0
 
+// get the users settings from chrome storage, and load defaults if none have been specified
+var apmodifierLoad = 1.33
+var honmodifierLoad = 0.66
+var bgcolorLoad = "#b7da9b"
+var mdcolorLoad = "#39FF14"
+var pagewaitLoad = 5000
+
+chrome.storage.sync.get({
+	outputColor: "#b7da9b",
+	modalColor: "#b7da9b",
+	loadWait: 5000,
+	apMod: 1.33,
+	honMod: .66
+}, function(items) {
+	console.log(items)
+	bgcolorLoad = items.outputColor;
+	if (bgcolorLoad == undefined || (bgcolorLoad != "#5FDEE8" && bgcolorLoad != "#B175FF" && bgcolorLoad != "#E8745F" && bgcolorLoad != "#FFE169")) {
+		bgcolorLoad = "#b7da9b";
+	}
+
+	mdcolorLoad = items.modalColor;
+	if (mdcolorLoad == undefined) {
+		mdcolorLoad = "#39FF14";
+	}
+
+	apmodifierLoad = items.apMod
+	if(apmodifierLoad == undefined) {apmodifierLoad = "1.33"}
+
+	honmodifierLoad = items.honMod
+	if(honmodifierLoad == undefined) {honmodifierLoad = ".66"}
+
+	pagewaitLoad = items.loadWait
+	if(pagewaitLoad == undefined) {pagewaitLoad = 5000}
+})
+
 // Verify if the page is actually on myschoolapp. Chrome SHOULD do this, but this is a failsafe so we dont clog our debugging notifications with irrelevant junk
 var loc = window.location.href
 var boolLoc = loc.includes(".myschoolapp.com")
 
 if(boolLoc) {
 	// This is the portal
-	setTimeout(function(){ grade(); }, 5500);
+	setTimeout(function(){ grade(); }, pagewaitLoad);
 }
 
 // Let people know (in the console) that the injection is successful. This in no way says it will work, but the script has run
@@ -48,7 +85,7 @@ console.log("Myschoolapp GPA Calculator has been successfully injected")
 
 // Allow a breif timeout (5 seconds) for the portal to load in - it usually takes a few seconds to build the page, then start the program by calling grade()
 window.onhashchange = function() { 
-     setTimeout(function(){ grade(); }, 5500);
+     setTimeout(function(){ grade(); }, pagewaitLoad);
 }
 
 // Our master function - absolutely horribly written but i dont really want to change it. If anyone wants to they are welcome to put it in a loop
@@ -168,12 +205,12 @@ function getClassName(elem) {
 function getClassWeight(elem) {
 	var course = elem.getElementsByClassName("col-md-3")[0].getElementsByTagName("h3")[0].innerHTML.toString()
 		if(course.toLowerCase().includes("ap") == true) {
-			var modifier = 1.33
-			return 1.33
+			var modifier = apmodifierLoad
+			return apmodifierLoad
 		} else {
 			if(course.toLowerCase().includes("hon") == true) {
-				var modifier = 0.666
-				return 0.66
+				var modifier = honmodifierLoad
+				return honmodifierLoad
 			} else {
 				var modifier = 0
 				return 0.0
@@ -258,6 +295,7 @@ function appendGrades(gradesMaster) {
 		z.className = 'accordion-toggle';
 		var x = document.createElement("span")
 		x.className = 'label label-success'
+		x.style.backgroundColor = bgcolorLoad
 		x.innerHTML = gradesMaster
 		var br = document.createElement("br")
 		var hr = document.createElement("hr")
@@ -266,69 +304,71 @@ function appendGrades(gradesMaster) {
 		y.appendChild(z);
 		y.appendChild(br);
 		y.appendChild(hr);
+		document.getElementById("insightGpaOut").setAttribute('style','color:'+mdcolorLoad)
 	}
 	
 }
 
 // Creates the modal that will ultimately show the table from populateModalTable()
 function createModalV2() {
-	var modalParent = document.createElement('div')
-	modalParent.setAttribute('style','position:fixed;width:100%;height:100%;z-index:9999;background-color:rgba(0,0,0,0.4);top:0;')
-	modalParent.setAttribute('id','modalParent')
-	var bbModal = document.createElement('div')
-	bbModal.setAttribute('style','position:absolute;width:60%;padding:15px;margin-top:15%;margin-left:20%;background-color:white;box-shadow: 0 5px 15px rgba(0,0,0,0.5);')
-	var close = document.createElement('button')
-	close.setAttribute('type','button')
-	close.setAttribute('onclick','closeInsights()')
-	close.setAttribute('class','btn btn-default')
-	close.innerHTML = "Close Insights"
-	var gpaOutTitle = document.createElement('h1')
-	gpaOutTitle.innerHTML = "Your GPA: "
-	var gpaOut = document.createElement('span')
-	gpaOut.setAttribute('style','color:#39FF14')
-	gpaOut.innerHTML = "4.0"
-	gpaOut.setAttribute('id','insightGpaOut')
+	if(document.getElementById("modalParent")==null) {
+		var modalParent = document.createElement('div')
+		modalParent.setAttribute('style','position:fixed;width:100%;height:100%;z-index:9999;background-color:rgba(0,0,0,0.4);top:0;')
+		modalParent.setAttribute('id','modalParent')
+		var bbModal = document.createElement('div')
+		bbModal.setAttribute('style','position:absolute;width:60%;padding:15px;margin-top:15%;margin-left:20%;background-color:white;box-shadow: 0 5px 15px rgba(0,0,0,0.5);')
+		var close = document.createElement('button')
+		close.setAttribute('type','button')
+		close.setAttribute('onclick','closeInsights()')
+		close.setAttribute('class','btn btn-default')
+		close.innerHTML = "Close Insights"
+		var gpaOutTitle = document.createElement('h1')
+		gpaOutTitle.innerHTML = "Your GPA: "
+		var gpaOut = document.createElement('span')
+		gpaOut.innerHTML = "4.0"
+		gpaOut.setAttribute('id','insightGpaOut')
 
 
-	var table = document.createElement('table')                           // --------------table:19-------------
-	table.setAttribute('id','gpaOutTable')                                // |  Class  |  Grade  |  GPA Score  |  tr 21
-	var headerTr = document.createElement('tr')                           //   th 23      th 27     th 31
-	
-	var th = document.createElement('th')
-	th.innerHTML = 'Class'
-	headerTr.appendChild(th)
+		var table = document.createElement('table')                           // --------------table:19-------------
+		table.setAttribute('id','gpaOutTable')                                // |  Class  |  Grade  |  GPA Score  |  tr 21
+		var headerTr = document.createElement('tr')                           //   th 23      th 27     th 31
+		
+		var th = document.createElement('th')
+		th.innerHTML = 'Class'
+		headerTr.appendChild(th)
 
-	th = document.createElement('th')
-	th.innerHTML = "Grade"
-	headerTr.appendChild(th)
+		th = document.createElement('th')
+		th.innerHTML = "Grade"
+		headerTr.appendChild(th)
 
-	th = document.createElement('th')
-	th.innerHTML = "GPA Score (unweighted)"
-	headerTr.appendChild(th)
+		th = document.createElement('th')
+		th.innerHTML = "GPA Score (unweighted)"
+		headerTr.appendChild(th)
 
-	// CONTINUE HERE: GRADE WEIGHT
+		// CONTINUE HERE: GRADE WEIGHT
 
-	table.setAttribute('class','table table-striped table-condensed table-mobile-stacked')
+		table.setAttribute('class','table table-striped table-condensed table-mobile-stacked')
 
-	table.appendChild(headerTr)
+		table.appendChild(headerTr)
 
-	var style = document.createElement('style')
-	// style.innerHTML = "table,th,td{border:1px solid black;border-collapse:collapse} th,td {width:30%}"
+		var style = document.createElement('style')
+		// style.innerHTML = "table,th,td{border:1px solid black;border-collapse:collapse} th,td {width:30%}"
 
-	style.innerHTML = "tr:nth-child(even) {background-color: #f2f2f2}"
+		style.innerHTML = "tr:nth-child(even) {background-color: #f2f2f2}"
 
-	modalParent.appendChild(style)
+		modalParent.appendChild(style)
 
-	var br = document.createElement(br)
+		var br = document.createElement(br)
 
-	gpaOutTitle.appendChild(gpaOut)
-	bbModal.appendChild(gpaOutTitle)
-	bbModal.appendChild(br)
-	bbModal.appendChild(table)
-	bbModal.appendChild(close)
-	modalParent.appendChild(bbModal)
-	document.body.appendChild(modalParent)
-	// console.log(modalParent)
+		gpaOutTitle.appendChild(gpaOut)
+		bbModal.appendChild(gpaOutTitle)
+		bbModal.appendChild(br)
+		bbModal.appendChild(table)
+		bbModal.appendChild(close)
+		modalParent.appendChild(bbModal)
+		document.body.appendChild(modalParent)
+		// console.log(modalParent)
+	}
 }
 
 // Injects the functions for modal controls into the page because im too lazy to figure out how to do it the right way -- kind of a reacuring thing
