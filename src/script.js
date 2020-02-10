@@ -12,6 +12,10 @@
 // *    | 1/16/20  | Jack | 1.4.0 | Removed old, unnecessary functions and commented                   |    *
 // *    | 1/21/20  | Jack | 1.5.0 | Integrated a settings page to allow user to change color theme and |    *
 // *    |          |      |       | AP and honors modifiers, as well as the page calc timeout.         |    *
+// *    | 2/6/20   | Jack | 1.5.2 | Added 2 buttons in the modal -- go to the class page and view the  |    *
+// *    |          |      |       | grade detail. Links and pages are dynamically selected             |    *
+// *    |          |      |       | [bug] IDKY but occasionally it populates the modal twice.          |    *
+// *    | 2/9/20   | Jack | 1.5.3 | Bug fixes and add grade display to each class detai page           |    *
 // *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *     ______________________________________________________________________________________________     *
@@ -36,6 +40,8 @@ const gpa_avg = []
 var insightsArray = new Array()
 var insightsArrayLength = 0
 
+var disableMod = false;
+
 // get the users settings from chrome storage, and load defaults if none have been specified
 var apmodifierLoad = 1.33
 var honmodifierLoad = 0.66
@@ -50,7 +56,7 @@ chrome.storage.sync.get({
 	apMod: 1.33,
 	honMod: .66
 }, function(items) {
-	console.log(items)
+	// console.log(items)
 	bgcolorLoad = items.outputColor;
 	if (bgcolorLoad == undefined || (bgcolorLoad != "#5FDEE8" && bgcolorLoad != "#B175FF" && bgcolorLoad != "#E8745F" && bgcolorLoad != "#FFE169")) {
 		bgcolorLoad = "#b7da9b";
@@ -85,68 +91,89 @@ console.log("Myschoolapp GPA Calculator has been successfully injected")
 
 // Allow a breif timeout (5 seconds) for the portal to load in - it usually takes a few seconds to build the page, then start the program by calling grade()
 window.onhashchange = function() { 
-     setTimeout(function(){ grade(); }, pagewaitLoad);
+     setTimeout(function(){ disableMod = true;grade(); }, pagewaitLoad);
 }
 
 // Our master function - absolutely horribly written but i dont really want to change it. If anyone wants to they are welcome to put it in a loop
 function grade() {
-	var rows = getElements()
-	var elem1 = rows[0]
-	var elem2 = rows[1]
-	var elem3 = rows[2]
-	var elem4 = rows[3]
-	var elem5 = rows[4]
-	var elem6 = rows[5]
-	var elem7 = rows[6]
-	var elem8 = rows[7]
-	var elem9 = rows[8]
-	var elem10 = rows[9]
-	var elem11 = rows[10]
-	var elem12 = rows[11]
-	var elem13 = rows[12]
-	var elem14 = rows[13]
-	var elem15 = rows[14]
-	var elem16 = rows[15]
-	var elem17 = rows[16]
-	var elem18 = rows[17]
-	var elem19 = rows[18]
-	var elem20 = rows[19]
-	var elem21 = rows[20]
-	var elem22 = rows[21]
-	var elem23 = rows[22]
+	if(document.getElementById("overview")==null) {
 
-	if(calcGrade(elem1) == "nc") {} else {doStuffWith(elem1)}
-	if(calcGrade(elem2) == "nc") {} else {doStuffWith(elem2)}
-	if(calcGrade(elem3) == "nc") {} else {doStuffWith(elem3)}
-	if(calcGrade(elem4) == "nc") {} else {doStuffWith(elem4)}
-	if(calcGrade(elem5) == "nc") {} else {doStuffWith(elem5)}
-	if(calcGrade(elem6) == "nc") {} else {doStuffWith(elem6)}
-	if(calcGrade(elem7) == "nc") {} else {doStuffWith(elem7)}
-	if(calcGrade(elem8) == "nc") {} else {doStuffWith(elem8)}
-	if(calcGrade(elem9) == "nc") {} else {doStuffWith(elem9)}
-	if(calcGrade(elem10) == "nc") {} else {doStuffWith(elem10)}
-	if(calcGrade(elem11) == "nc") {} else {doStuffWith(elem11)}
-	if(calcGrade(elem12) == "nc") {} else {doStuffWith(elem12)}
-	if(calcGrade(elem13) == "nc") {} else {doStuffWith(elem13)}
-	if(calcGrade(elem14) == "nc") {} else {doStuffWith(elem14)}
-	if(calcGrade(elem15) == "nc") {} else {doStuffWith(elem15)}
-	if(calcGrade(elem16) == "nc") {} else {doStuffWith(elem16)}
-	if(calcGrade(elem17) == "nc") {} else {doStuffWith(elem17)}
-	if(calcGrade(elem18) == "nc") {} else {doStuffWith(elem18)}
-	if(calcGrade(elem19) == "nc") {} else {doStuffWith(elem19)}
-	if(calcGrade(elem20) == "nc") {} else {doStuffWith(elem20)}
-	if(calcGrade(elem21) == "nc") {} else {doStuffWith(elem21)}
-	if(calcGrade(elem22) == "nc") {} else {doStuffWith(elem22)}
-	if(calcGrade(elem23) == "nc") {} else {doStuffWith(elem23)}
-	
+		// We are on the progress page
+		var rows = getElements()
+		var elem1 = rows[0]
+		var elem2 = rows[1]
+		var elem3 = rows[2]
+		var elem4 = rows[3]
+		var elem5 = rows[4]
+		var elem6 = rows[5]
+		var elem7 = rows[6]
+		var elem8 = rows[7]
+		var elem9 = rows[8]
+		var elem10 = rows[9]
+		var elem11 = rows[10]
+		var elem12 = rows[11]
+		var elem13 = rows[12]
+		var elem14 = rows[13]
+		var elem15 = rows[14]
+		var elem16 = rows[15]
+		var elem17 = rows[16]
+		var elem18 = rows[17]
+		var elem19 = rows[18]
+		var elem20 = rows[19]
+		var elem21 = rows[20]
+		var elem22 = rows[21]
+		var elem23 = rows[22]
 
-	appendGrades(averageIze())
+		if(calcGrade(elem1) == "nc") {} else {doStuffWith(elem1)}
+		if(calcGrade(elem2) == "nc") {} else {doStuffWith(elem2)}
+		if(calcGrade(elem3) == "nc") {} else {doStuffWith(elem3)}
+		if(calcGrade(elem4) == "nc") {} else {doStuffWith(elem4)}
+		if(calcGrade(elem5) == "nc") {} else {doStuffWith(elem5)}
+		if(calcGrade(elem6) == "nc") {} else {doStuffWith(elem6)}
+		if(calcGrade(elem7) == "nc") {} else {doStuffWith(elem7)}
+		if(calcGrade(elem8) == "nc") {} else {doStuffWith(elem8)}
+		if(calcGrade(elem9) == "nc") {} else {doStuffWith(elem9)}
+		if(calcGrade(elem10) == "nc") {} else {doStuffWith(elem10)}
+		if(calcGrade(elem11) == "nc") {} else {doStuffWith(elem11)}
+		if(calcGrade(elem12) == "nc") {} else {doStuffWith(elem12)}
+		if(calcGrade(elem13) == "nc") {} else {doStuffWith(elem13)}
+		if(calcGrade(elem14) == "nc") {} else {doStuffWith(elem14)}
+		if(calcGrade(elem15) == "nc") {} else {doStuffWith(elem15)}
+		if(calcGrade(elem16) == "nc") {} else {doStuffWith(elem16)}
+		if(calcGrade(elem17) == "nc") {} else {doStuffWith(elem17)}
+		if(calcGrade(elem18) == "nc") {} else {doStuffWith(elem18)}
+		if(calcGrade(elem19) == "nc") {} else {doStuffWith(elem19)}
+		if(calcGrade(elem20) == "nc") {} else {doStuffWith(elem20)}
+		if(calcGrade(elem21) == "nc") {} else {doStuffWith(elem21)}
+		if(calcGrade(elem22) == "nc") {} else {doStuffWith(elem22)}
+		if(calcGrade(elem23) == "nc") {} else {doStuffWith(elem23)}
+		
+
+		appendGrades(averageIze())
+	} else {
+		if(document.getElementById("currentGradeDisp")==null) {
+			// We are on another page
+			var overview = document.getElementById("overview")
+			console.log(overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0])
+			var courseName = overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0].childNodes[0]
+			console.log(courseName)
+			var grade = localStorage.getItem(courseName.nodeValue.trim().replace(/[^a-zA-Z0-9]/g,'_'))
+			var parent = document.createElement("div")
+			var x = document.createElement("span")
+			x.className = 'label label-success'
+			x.style.backgroundColor = bgcolorLoad
+			x.innerHTML = "Current Grade: " + grade
+			x.setAttribute("id","currentGradeDisp")
+			overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0].appendChild(x)
+		}
+	}
 }
 
 // An adittedly bad name - this function will add the calculated grade to the gpa_avg array to be averaged later on. The last is from a feature that I abandoned - the modal
 function doStuffWith(elem) {
+	createLoc(elem)
 	gpa_avg.push(calcGrade(elem))
-	populateModalTable(elem)
+	if(!disableMod){populateModalTable(elem)}else{}
 }
 
 function getElements() {
@@ -157,7 +184,12 @@ function getElements() {
 	return rows
 }
 
-
+function createLoc(elem) {
+	var corseName = getClassName(elem).replace(/[^a-zA-Z0-9]/g,'_');
+	console.log(corseName)
+	var corseGrade = getClassGrade(elem)
+	localStorage.setItem(corseName,corseGrade)
+}
 
 // And heres where all the magic happens. This element gets the corse name and sees if it includes anything that would indicate a higher level corse and gets the current grade.
 function calcGrade(elem) {
@@ -201,6 +233,32 @@ function getClassName(elem) {
 	}
 }
 
+function getClassLink(elem) {
+	if(elem != null) {
+		var course = elem.getElementsByClassName("col-md-3")[0].getElementsByTagName("h3")[0]
+		// console.log(course)
+		var path = getDomPath(course);
+		// console.log(path)
+		return path
+
+	} else {
+		return "nc"
+	}
+}
+
+function getGradeDetail(elem) {
+	if(elem != null) {
+		var detail = elem.getElementsByClassName("col-md-2")[2].getElementsByTagName("a")[0]
+		// console.log(detail)
+		var path = getDomPath(detail);
+		// console.log(path)
+		return path
+
+	} else {
+		return "nc"
+	}
+}
+
 // Determine class weight
 function getClassWeight(elem) {
 	var course = elem.getElementsByClassName("col-md-3")[0].getElementsByTagName("h3")[0].innerHTML.toString()
@@ -234,9 +292,54 @@ function getClassGrade(elem) {
 	}
 }
 
+function getDomPath(el) {
+  if (!el) {
+    return;
+  }
+  var stack = [];
+  var isShadow = false;
+  while (el.parentNode != null) {
+    // console.log(el.nodeName);
+    var sibCount = 0;
+    var sibIndex = 0;
+    // get sibling indexes
+    for ( var i = 0; i < el.parentNode.childNodes.length; i++ ) {
+      var sib = el.parentNode.childNodes[i];
+      if ( sib.nodeName == el.nodeName ) {
+        if ( sib === el ) {
+          sibIndex = sibCount;
+        }
+        sibCount++;
+      }
+    }
+    // if ( el.hasAttribute('id') && el.id != '' ) { no id shortcuts, ids are not unique in shadowDom
+    //   stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
+    // } else
+    var nodeName = el.nodeName.toLowerCase();
+    if (isShadow) {
+      nodeName += "::shadow";
+      isShadow = false;
+    }
+    if ( sibCount > 1 ) {
+      stack.unshift(nodeName + ':nth-of-type(' + (sibIndex + 1) + ')');
+    } else {
+      stack.unshift(nodeName);
+    }
+    el = el.parentNode;
+    if (el.nodeType === 11) { // for shadow dom, we
+      isShadow = true;
+      el = el.host;
+    }
+  }
+  stack.splice(0,1); // removes the html element
+  var ret = stack.join(' > ');
+  ret.replace("&quot;","")
+  return ret;
+}
+
 // Makes then fills in the table in the modal
 function populateModalTable(elem) {
-	var modalClassName = getClassName(elem)
+	var modalClassName = getClassName(elem) + "<a href='javascript:closeInsights();document.querySelector("+'"'+getClassLink(elem)+'"'+").click()'> Class</a>" + "| <a href='javascript:closeInsights();document.querySelector("+'"'+getGradeDetail(elem)+'"'+").click()'>Grade Detail</a>"
 	var modalClassGrade = getClassGrade(elem)
 	var modalClassGpa = gradeToGpa(modalClassGrade.replace('%','').toString())
 	var modalClassWeight = getClassWeight(elem)
@@ -311,6 +414,7 @@ function appendGrades(gradesMaster) {
 
 // Creates the modal that will ultimately show the table from populateModalTable()
 function createModalV2() {
+	// console.log("creating Table")
 	if(document.getElementById("modalParent")==null) {
 		var modalParent = document.createElement('div')
 		modalParent.setAttribute('style','position:fixed;width:100%;height:100%;z-index:9999;background-color:rgba(0,0,0,0.4);top:0;')
