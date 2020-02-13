@@ -16,6 +16,7 @@
 // *    |          |      |       | grade detail. Links and pages are dynamically selected             |    *
 // *    |          |      |       | [bug] IDKY but occasionally it populates the modal twice.          |    *
 // *    | 2/9/20   | Jack | 1.5.3 | Bug fixes and add grade display to each class detai page           |    *
+// *    | 2/12/20  | Jack | 1.5.5 | Bug fixes, making a info section on the options page               |    *
 // *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *     ______________________________________________________________________________________________     *
@@ -39,6 +40,8 @@ const GPA_MAP = {100:4.3,99:4.3,98:4.3,97:4.3,96:4.0,95:4.0,94:4.0,93:3.7,92:3.7
 const gpa_avg = []
 var insightsArray = new Array()
 var insightsArrayLength = 0
+
+
 
 var disableMod = false;
 
@@ -98,6 +101,9 @@ window.onhashchange = function() {
 function grade() {
 	if(document.getElementById("overview")==null) {
 
+
+
+
 		// We are on the progress page
 		var rows = getElements()
 		var elem1 = rows[0]
@@ -150,6 +156,13 @@ function grade() {
 		
 
 		appendGrades(averageIze())
+
+		chrome.storage.sync.set({
+			user: document.querySelector("#account-nav>.desc>.title").innerHTML.replace("<br>"," "),
+			gpa: gradesMasterAppd,
+			location: window.location.href
+		})
+		console.log(chrome.storage)
 	} else {
 		if(document.getElementById("currentGradeDisp")==null) {
 			// We are on another page
@@ -366,12 +379,19 @@ function populateModalTable(elem) {
 
 	// There is sooooooo much more that can be done in here...
 
+	document.querySelector("#account-nav>.desc>.title").innerHTML.replace("<br>"," ")
+	
+
 }
 
 // Turns a grade from a percentage to a gpa
 function gradeToGpa(pct){
-	pct = Math.round(pct)
-	return GPA_MAP[pct]
+	if(pct>100) {
+		return 4.3;
+	} else {
+		pct = Math.round(pct)
+		return GPA_MAP[pct]
+	}
 }
 
 // Averages the array that is the gpas
@@ -383,10 +403,10 @@ function averageIze() {
 	var finalAverage = total / gpa_avg.length;
 	return finalAverage.toFixed(3)
 }
-
+var gradesMasterAppd
 // Creates and fills in the display element that shows the GPA. 
 function appendGrades(gradesMaster) {
-
+	gradesMasterAppd = gradesMaster
 	document.getElementById("performanceCollapse").getElementsByTagName("div")[0].id = "gpaParent"
 
 	if(document.getElementById("gpaDisplay")==null) {
@@ -490,6 +510,8 @@ function closeInsights() {
 function openInsights() {
 	document.getElementById('modalParent').style.display = 'block'
 }
+
+// main()
 
 //random functions to call to get the modal working.
 createInsightFucntions()
