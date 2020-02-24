@@ -99,10 +99,7 @@ window.onhashchange = function() {
 
 // Our master function - absolutely horribly written but i dont really want to change it. If anyone wants to they are welcome to put it in a loop
 function grade() {
-	if(document.getElementById("overview")==null) {
-
-
-
+	if(document.getElementsByClassName("active")[1].getElementsByTagName("a")[0].innerText.includes("Progress")) {
 
 		// We are on the progress page
 		var rows = getElements()
@@ -163,22 +160,28 @@ function grade() {
 			location: window.location.href
 		})
 		console.log(chrome.storage)
-	} else {
-		if(document.getElementById("currentGradeDisp")==null) {
-			// We are on another page
-			var overview = document.getElementById("overview")
-			console.log(overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0])
-			var courseName = overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0].childNodes[0]
-			console.log(courseName)
-			var grade = localStorage.getItem(courseName.nodeValue.trim().replace(/[^a-zA-Z0-9]/g,'_'))
-			var parent = document.createElement("div")
-			var x = document.createElement("span")
-			x.className = 'label label-success'
-			x.style.backgroundColor = bgcolorLoad
-			x.innerHTML = "Current Grade: " + grade
-			x.setAttribute("id","currentGradeDisp")
-			overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0].appendChild(x)
+	} else if (document.getElementsByClassName("active")[1].getElementsByTagName("a")[0].innerText.includes("Assignment Center")) {
+		// On Assignment Center
+
+		var assignments = document.getElementsByClassName("fc-title")
+		console.log(assignments)
+		for (let item of assignments) {
+		    fixAssignments(item)
 		}
+	} else {
+		// We are on a class page or something else...
+		var overview = document.getElementById("overview")
+		console.log(overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0])
+		var courseName = overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0].childNodes[0]
+		console.log(courseName)
+		var grade = localStorage.getItem(courseName.nodeValue.trim().replace(/[^a-zA-Z0-9]/g,'_'))
+		var parent = document.createElement("div")
+		var x = document.createElement("span")
+		x.className = 'label label-success'
+		x.style.backgroundColor = bgcolorLoad
+		x.innerHTML = "Current Grade: " + grade
+		x.setAttribute("id","currentGradeDisp")
+		overview.getElementsByTagName("div")[0].getElementsByClassName("bb-page-heading")[0].appendChild(x)
 	}
 }
 
@@ -187,6 +190,14 @@ function doStuffWith(elem) {
 	createLoc(elem)
 	gpa_avg.push(calcGrade(elem))
 	if(!disableMod){populateModalTable(elem)}else{}
+}
+
+function fixAssignments(e,index) {
+	let a = e.getElementsByTagName("div")[0].getElementsByTagName("a")[1]
+	var before = a.getElementsByTagName("span")[0].innerText
+	a.getElementsByTagName("br")[0].remove()
+	a.getElementsByTagName("span")[0].remove()
+	var ce = document.createElement("span")
 }
 
 function getElements() {
@@ -517,3 +528,14 @@ function openInsights() {
 createInsightFucntions()
 createModalV2()
 closeInsights()
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
+}

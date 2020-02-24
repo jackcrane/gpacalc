@@ -5,7 +5,10 @@
 	<meta name="referrer" content="no-referrer" />
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 	<script src="jquery.js"></script>
-	
+	<script src="hl.js"></script>
+	<!-- <script src="javascript.js"></script> -->
+	<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
 	<style>
 		* {
 			font-family:'roboto',sans-serif;
@@ -211,6 +214,10 @@
 							</table>
 						</td>
 					</tr>
+					<!-- <tr>
+						<td><b>Custom Scripts:</b></td>
+						<td><pre><code class="javascript" id="theTextarea" contenteditable="true">alert("hello")</code></pre></td>
+					</tr> -->
 				</table>
 				<input type="submit" value="Save" id="save" class="label label-green"><br><br>
 				<input type="submit" value="Load Defaults" id="loaddefaults" class="label label-orange">
@@ -222,7 +229,13 @@
 			<div class="card">
 				<h2>Extension Information</h2>
 				<b>Version: </b><span id="version"></span><br>
-				<b>User: </b><span id="user"></span>
+				<b>User: </b><span id="user"></span><br>
+				<b>Credits: </b><span>Project Lead: Jack Crane; Secondary developer: CJ Replogle</span>
+			</div>
+			<div class="card">
+				<h2>Privacy</h2>
+				<span>Ah yes the dreaded privacy clause...<br><br>But this one's pretty simple: <b>Nothing</b> gets sent back. That means NOTHING. Not your name, GPA, school, location, usage histories, <b>or anything else</b><br><br>That being said, If you have issues, check the box below to report <b>anonomous</b> telemetry to the dev team. This is left off, so nothing will be sent back to the devs. If you need it to be, then please do check that box.</span><br><br>
+				<input type="checkbox" id="sendData"><label for="sendData">Send anonomous telemetry</label>
 			</div>
 		</div>
 	</center>

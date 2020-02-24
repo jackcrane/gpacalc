@@ -1,3 +1,5 @@
+hljs.initHighlightingOnLoad()
+
 function save() {
 	// localStorage.outputColor = $('input[name=color]:checked', '#colors').val()
 	// localStorage.modalColor = $('input[name=mdcolor]:checked', '#modalColor').val()
@@ -74,9 +76,15 @@ function loadSettings() {
 	})	
 }
 
+function update() {
+	hljs.highlight();
+	console.log("update")
+}
+
 document.getElementsByTagName("body")[0].onload = loadSettings()
 document.getElementById("save").addEventListener("click", save);
 document.getElementById("loaddefaults").addEventListener("click", setDefaults);
+// document.getElementById("theTextarea").addEventListener("keyup", update);
 document.getElementById("qmark").addEventListener("click", function() {new Toast({message:'number of seconds to wait for the page to load. 5 is usually pretty good. Drop this number if you are on fast wifi and a fast computer. If the GPA consistently fails to show up, increase this number.'})});
 
 document.getElementById("version").innerHTML = chrome.runtime.getManifest().version.toString()
