@@ -144,9 +144,13 @@ const get = {
 			path = path.join(' > ').replaceAll('"','').replaceAll("'",'')
 			console.log(path)
 			return path
-
 		} else {
-			return "nc"
+			if(course.toLowerCase().includes("i/s") || course.toLowerCase().includes("research") || course.toLowerCase().includes("leadership") == true) {
+			return "nc";
+		//excludes independent studies, research science, and leadership from grade calculation
+			} else {
+				return "nc";
+			}
 		}
 	},
 	domPath:function(el) {
