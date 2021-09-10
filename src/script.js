@@ -17,6 +17,7 @@
 // *    |          |      |       | [bug] IDKY but occasionally it populates the modal twice.          |    *
 // *    | 2/9/20   | Jack | 1.5.3 | Bug fixes and add grade display to each class detai page           |    *
 // *    | 2/12/20  | Jack | 1.5.5 | Bug fixes, making a info section on the options page               |    *
+// *    | 9/10/21  |  CJ  | 1.5.6 | Fixed calculation of pass/fail classes.
 // *    |______________________________________________________________________________________________|    *
 // *                                                                                                        *
 // *     ______________________________________________________________________________________________     *
@@ -144,13 +145,9 @@ const get = {
 			path = path.join(' > ').replaceAll('"','').replaceAll("'",'')
 			console.log(path)
 			return path
+
 		} else {
-			if(course.toLowerCase().includes("i/s") || course.toLowerCase().includes("research") || course.toLowerCase().includes("leadership") == true) {
-			return "nc";
-		//excludes independent studies, research science, and leadership from grade calculation
-			} else {
-				return "nc";
-			}
+			return "nc"
 		}
 	},
 	domPath:function(el) {
@@ -380,7 +377,7 @@ const operations = {
 		}
 	},
 	calcGrade:function(elem) {
-		if(elem != null) {
+		if(elem != null || !(course.toLowerCase().includes("research") || course.toLowerCase().includes("i/s") || course.toLowerCase().includes("leadership"))) {
 			// Class name:
 			let course = get.class.name(elem)
 			// adding the gpa boost if it is high level:
