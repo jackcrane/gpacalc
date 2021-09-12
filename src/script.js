@@ -41,6 +41,7 @@ const GPA_MAP = {100:4.3,99:4.3,98:4.3,97:4.3,96:4.0,95:4.0,94:4.0,93:3.7,92:3.7
 const gpa_avg = []
 let insightsArray = new Array()
 let insightsArrayLength = 0
+let halfweight = 0
 
 let disableMod = false;
 
@@ -377,7 +378,7 @@ const operations = {
 		}
 	},
 	calcGrade:function(elem) {
-		if(elem != null || !(course.toLowerCase().includes("research") || course.toLowerCase().includes("i/s") || course.toLowerCase().includes("leadership"))) {
+		if(elem != null) {
 			// Class name:
 			let course = get.class.name(elem)
 			// adding the gpa boost if it is high level:
@@ -387,6 +388,9 @@ const operations = {
 			// Removing spaces and the "%":
 			currentGrade = currentGrade.replace(/^\s+|\s+$/gm,'').replace(/%/g,'')
 			// Make sure the grade is not empty:
+			if(course.toLowerCase().includes("i/s") || course.toLowerCase().includes("leadership")) {
+				return "nc"
+			}
 			if(currentGrade.toString().includes("&nbsp;") == false) {
 				// Setting the finalgrade to current grade if it is legit - I know I already replaced the spaces but it broke when i removed ".replace(/\s/g, '');"
 				let finalGrade = currentGrade.toString().replace(/\s/g, '');
@@ -395,6 +399,10 @@ const operations = {
 				let gpa = operations.gradeToGpa(finalGrade)
 				// Aand add the modifier... then return it
 				gpa = +gpa.toString() + +modifier.toString()
+				if(course.toLowerCase().includes("research science")) {
+					gpa = gpa / 2;
+					halfweight = halfweight + 0.25;
+				}
 				return gpa
 			} else {
 				// Return "nc" if anything goes wrong ("no content")
@@ -409,7 +417,8 @@ const operations = {
 		for(let i = 0; i < gpa_avg.length; i++) {
 			total += gpa_avg[i];
 		}
-		let finalAverage = total / gpa_avg.length;
+		divider = gpa_avg.length - halfweight;
+		let finalAverage = total / divider;
 		return finalAverage.toFixed(3)
 	}
 }
